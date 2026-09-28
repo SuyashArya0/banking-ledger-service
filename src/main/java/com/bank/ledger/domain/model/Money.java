@@ -38,7 +38,7 @@ public record Money(BigDecimal amount, Currency currency)
         return this.amount.compareTo(other.amount) < 0;
     }
 
-    public boolean isNegativeOrZero(Money other)
+    public boolean isNegativeOrZero()
     {
         return this.amount.compareTo(BigDecimal.ZERO) <= 0;
     }
