@@ -1,0 +1,58 @@
+# =========================================================================
+# Bytecode & Target Directories
+# =========================================================================
+target/
+build/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea_modules/
+
+# Eclipse
+.settings/
+.bin/
+.metadata/
+.classpath
+.project
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+
+# Logs, Environment & Security
+*.log
+logs/
+*.env
+*.env.local
+*.pem
+*.key
+*.jks
+
+# OS Generated Files
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
