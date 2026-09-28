@@ -20,7 +20,13 @@ public record Money(BigDecimal amount, Currency currency)
         return new Money(new BigDecimal(amount), Currency.getInstance(currencyCode));
     }
 
-    public Money add(Money other)
+    public Money add(Money other) //
+    {
+        ensureSameCurrency(other);
+        return new Money(this.amount.add(other.amount), this.currency);
+    }
+
+    public Money subtract(Money other) //
     {
         ensureSameCurrency(other);
         return new Money(this.amount.subtract(other.amount), this.currency);
