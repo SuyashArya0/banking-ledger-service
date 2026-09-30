@@ -7,11 +7,13 @@ build/
 *.ear
 *.nar
 # IntelliJ IDEA
-.idea/
+/.idea/
+/out/
 *.iws
 *.iml
 *.ipr
 .idea_modules/
+
 
 # Eclipse
 .settings/
@@ -45,7 +47,6 @@ logs/
 *.jks
 
 # OS Generated Files
-
 .DS_Store
 .DS_Store?
 ._*
