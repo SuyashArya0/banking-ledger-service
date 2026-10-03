@@ -30,7 +30,7 @@ public class AccountJpaEntity
 
     public AccountJpaEntity() {}
 
-    public AccountJpaEntity(UUID, String accountNumber, BigDecimal balance, String currency)
+    public AccountJpaEntity(UUID id, String accountNumber, BigDecimal balance, String currency)
     {
         this.id = id; // Objects.requireNonNull()
         this.accountNumber = accountNumber;
