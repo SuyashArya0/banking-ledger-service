@@ -1,7 +1,6 @@
 package com.bank.ledger.infrastructure.adapter.out.persistence.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.domain.Persistable;
 
 import java.math.BigDecimal;
 import java.util.UUID;
