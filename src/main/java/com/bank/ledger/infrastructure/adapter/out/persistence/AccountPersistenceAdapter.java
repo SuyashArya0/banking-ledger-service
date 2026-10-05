@@ -4,7 +4,7 @@ import com.bank.ledger.application.port.out.LoadAccountPort;
 import com.bank.ledger.application.port.out.SaveAccountPort;
 import com.bank.ledger.domain.model.Account;
 import com.bank.ledger.infrastructure.adapter.out.persistence.mapper.AccountMapper;
-import com.bank.ledger.infrastructure.adapter.out.persistence.repository.SpringDataTransactionRepository;
+import com.bank.ledger.infrastructure.adapter.out.persistence.repository.SpringDataAccountRepository;
 
 import org.springframework.stereotype.Component;
 
@@ -14,9 +14,9 @@ import java.util.UUID;
 @Component
 public class AccountPersistenceAdapter implements LoadAccountPort, SaveAccountPort
 {
-    private final SpringDataTransactionRepository accountRepository;
+    private final SpringDataAccountRepository accountRepository;
 
-    public AccountPersistenceAdapter(SpringDataTransactionRepository accountRepository)
+    public AccountPersistenceAdapter(SpringDataAccountRepository accountRepository)
     {
         this.accountRepository = accountRepository;
     }
