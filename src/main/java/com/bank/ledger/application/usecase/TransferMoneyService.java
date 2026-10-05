@@ -24,9 +24,8 @@ public class TransferMoneyService implements TransferMoneyUseCase
     private final SaveAccountPort saveAccountPort;
     private final SaveTransactionPort saveTransactionPort;
 
-    private PublishTransactionEventPort publishTransactionEventPort;
-    private RecordMetricsPort recordMetricsPort;
-    private LedgerMetricsAdapter metricsAdapter;
+    private final PublishTransactionEventPort publishTransactionEventPort;
+    private final RecordMetricsPort recordMetricsPort;
 
     public TransferMoneyService(
             LoadAccountPort loadAccountPort,
@@ -108,7 +107,7 @@ public class TransferMoneyService implements TransferMoneyUseCase
             );
 
             // Record Telemetry
-            metricsAdapter.recordSuccess(savedTx.getAmount().amount(), savedTx.getAmount().currency().getCurrencyCode());
+            recordMetricsPort.recordSuccess(savedTx.getAmount().amount(), savedTx.getAmount().currency().getCurrencyCode());
 
             return new TransferResult(
                     savedTx.getId(),
