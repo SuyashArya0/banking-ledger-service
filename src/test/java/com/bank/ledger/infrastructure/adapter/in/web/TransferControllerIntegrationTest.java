@@ -1,7 +1,6 @@
 package com.bank.ledger.infrastructure.adapter.in.web;
 
 import com.bank.ledger.AbstractIntegrationTest;
-import com.bank.ledger.domain.model.Money;
 import com.bank.ledger.infrastructure.adapter.in.web.dto.TransferRequest;
 import com.bank.ledger.infrastructure.adapter.out.persistence.entity.AccountJpaEntity;
 import com.bank.ledger.infrastructure.adapter.out.persistence.repository.SpringDataAccountRepository;
