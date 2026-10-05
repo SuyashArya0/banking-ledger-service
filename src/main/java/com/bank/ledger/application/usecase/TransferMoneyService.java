@@ -4,12 +4,11 @@ import com.bank.ledger.application.port.out.*;
 import com.bank.ledger.application.port.in.TransferCommand;
 import com.bank.ledger.application.port.in.TransferResult;
 import com.bank.ledger.application.port.in.TransferMoneyUseCase;
-
 import com.bank.ledger.domain.exception.AccountNotFoundException;
-// import com.bank.ledger.domain.exception.DuplicateTransactionException;
 import com.bank.ledger.domain.model.Transaction;
 import com.bank.ledger.domain.model.Account;
-// import com.bank.ledger.domain.model.TransactionStatus;
+import com.bank.ledger.domain.model.TransactionCompletedEvent;
+import com.bank.ledger.infrastructure.adapter.out.metrics.LedgerMetricsAdapter;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +24,22 @@ public class TransferMoneyService implements TransferMoneyUseCase
     private final SaveAccountPort saveAccountPort;
     private final SaveTransactionPort saveTransactionPort;
 
+    private PublishTransactionEventPort publishTransactionEventPort;
+    private RecordMetricsPort recordMetricsPort;
+    private LedgerMetricsAdapter metricsAdapter;
+
     public TransferMoneyService(
             LoadAccountPort loadAccountPort,
             SaveAccountPort saveAccountPort,
-            SaveTransactionPort saveTransactionPort
+            SaveTransactionPort saveTransactionPort,
+            PublishTransactionEventPort publishTransactionEventPort,
+            RecordMetricsPort recordMetricsPort
     ) {
         this.loadAccountPort = Objects.requireNonNull(loadAccountPort);
         this.saveAccountPort = Objects.requireNonNull(saveAccountPort);
         this.saveTransactionPort = Objects.requireNonNull(saveTransactionPort);
+        this.publishTransactionEventPort = Objects.requireNonNull(publishTransactionEventPort);
+        this.recordMetricsPort = Objects.requireNonNull(recordMetricsPort);
     }
 
     @Override
@@ -41,7 +48,8 @@ public class TransferMoneyService implements TransferMoneyUseCase
         // Check idempotency key
         Optional<Transaction> existingTransaction = saveTransactionPort.findByReferenceId((command.referenceId()));
 
-        if (existingTransaction.isPresent()) {
+        if (existingTransaction.isPresent())
+        {
             Transaction tx = existingTransaction.get();
             return new TransferResult(
                     tx.getId(),
@@ -87,6 +95,20 @@ public class TransferMoneyService implements TransferMoneyUseCase
             transaction.markCompleted();
             Transaction savedTx = saveTransactionPort.saveTransaction(transaction);
 
+            publishTransactionEventPort.publishTransactionCompleted(
+                    new TransactionCompletedEvent(
+                            savedTx.getId(),
+                            savedTx.getReferenceId(),
+                            savedTx.getSourceAccountId(),
+                            savedTx.getTargetAccountId(),
+                            savedTx.getAmount(),
+                            savedTx.getCreatedAt()
+                    )
+            );
+
+            // Record Telemetry
+            metricsAdapter.recordSuccess(savedTx.getAmount().amount(), savedTx.getAmount().currency().getCurrencyCode());
+
             return new TransferResult(
                     savedTx.getId(),
                     savedTx.getReferenceId(),
@@ -96,7 +118,10 @@ public class TransferMoneyService implements TransferMoneyUseCase
                     savedTx.getStatus(),
                     savedTx.getCreatedAt()
             );
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
+            recordMetricsPort.recordFailure();
             transaction.markFailed();
             saveTransactionPort.saveTransaction(transaction);
             throw e;
