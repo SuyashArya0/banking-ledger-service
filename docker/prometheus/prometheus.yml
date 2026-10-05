@@ -5,4 +5,4 @@ scrape_configs:
   - job_name: 'banking-ledger-service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['host.docker.internal:8080']  # Scrapes host application directly or 'app:8080' if inside docker network
+      - targets: ['host.docker.internal:8080']

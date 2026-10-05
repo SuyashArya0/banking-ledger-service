@@ -3,7 +3,7 @@ spring:
     name: banking-ledger-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/banking_db
+    url: jdbc:postgresql://localhost:5433/banking_db
     username: postgres
     password: postgres_password
     driver-class-name: org.postgresql.Driver
