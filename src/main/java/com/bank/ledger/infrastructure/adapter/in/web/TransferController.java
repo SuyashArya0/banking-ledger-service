@@ -7,8 +7,15 @@ import com.bank.ledger.domain.model.Money;
 import com.bank.ledger.infrastructure.adapter.in.web.dto.TransferRequest;
 import com.bank.ledger.infrastructure.adapter.in.web.dto.TransferResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/transfers")
+@Tag(name = "Transfers", description = "Endpoints for executing ledger transaction transfers")
 public class TransferController
 {
     private final TransferMoneyUseCase useCase;
@@ -27,6 +35,17 @@ public class TransferController
     }
 
     @PostMapping
+    @Operation(summary = "Execute money transfer", description = "Perforns a double-entry debit and credit transfer between two accounts with pessimistic locking and idempotency guarantees.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Transfer completed successfully",
+                    content = @Content(schema = @Schema(implementation = TransferResponse.class))),
+            @ApiResponse(responseCode = "422", description = "Insufficient funds in source account",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "404", description = "Source or target account not found",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request payload or currency mismatch",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
     public ResponseEntity<TransferResponse> executeTransfer(@Valid @RequestBody TransferRequest request)
     {
         TransferCommand command = new TransferCommand(
