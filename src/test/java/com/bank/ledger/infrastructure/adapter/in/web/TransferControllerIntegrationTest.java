@@ -57,8 +57,8 @@ public class TransferControllerIntegrationTest extends AbstractIntegrationTest
         targetAccountId = UUID.randomUUID();
 
         // Seed Initial Accounts
-        accountRepository.save(new AccountJpaEntity(sourceAccountId, "ACC-001", new BigDecimal("1000.00"), "USD"));
-        accountRepository.save(new AccountJpaEntity(targetAccountId, "ACC-002", new BigDecimal("500.00"), "USD"));
+        accountRepository.save(new AccountJpaEntity(sourceAccountId, "ACC-001", new BigDecimal("1000.00"), "USD", 0L));
+        accountRepository.save(new AccountJpaEntity(targetAccountId, "ACC-002", new BigDecimal("500.00"), "USD", 1L));
     }
 
     @Test

@@ -10,12 +10,14 @@ public class Account
     private final UUID id;
     private final String accountNumber;
     private Money balance;
+    private final Long version; // Added version field
 
-    public Account(UUID id, String accountNumber, Money balance)
+    public Account(UUID id, String accountNumber, Money balance, Long version)
     {
         this.id = Objects.requireNonNull(id, "Account ID must not be null");
         this.accountNumber = Objects.requireNonNull(accountNumber, "Account Number must not be null");
         this.balance = Objects.requireNonNull(balance, "Balance must not be null");
+        this.version = version;
     }
 
     public void debit(Money amount)
@@ -37,4 +39,5 @@ public class Account
     public UUID getId() { return id; }
     public String getAccountNumber() { return accountNumber; }
     public Money getBalance() { return balance; }
+    public Long getVersion() { return version; }
 }

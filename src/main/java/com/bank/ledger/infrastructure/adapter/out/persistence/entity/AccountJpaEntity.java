@@ -1,10 +1,7 @@
 package com.bank.ledger.infrastructure.adapter.out.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
+import org.springframework.data.domain.Persistable;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -30,12 +27,13 @@ public class AccountJpaEntity
 
     public AccountJpaEntity() {}
 
-    public AccountJpaEntity(UUID id, String accountNumber, BigDecimal balance, String currency)
+    public AccountJpaEntity(UUID id, String accountNumber, BigDecimal balance, String currency, Long version)
     {
         this.id = id; // Objects.requireNonNull()
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.currency = currency;
+        this.version = version;
     }
 
     public UUID getId() { return id; }
@@ -51,4 +49,5 @@ public class AccountJpaEntity
     public void setCurrency(String currency) { this.currency = currency; }
 
     public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
 }

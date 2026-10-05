@@ -13,7 +13,7 @@ public class AccountMapper
         if(entity == null) return null;
 
         Money balance = new Money(entity.getBalance(), Currency.getInstance(entity.getCurrency()));
-        return new Account(entity.getId(), entity.getAccountNumber(), balance);
+        return new Account(entity.getId(), entity.getAccountNumber(), balance, entity.getVersion());
     }
 
     public static AccountJpaEntity toJpaEntity(Account domain)
@@ -24,7 +24,8 @@ public class AccountMapper
                 domain.getId(),
                 domain.getAccountNumber(),
                 domain.getBalance().amount(),
-                domain.getBalance().currency().getCurrencyCode()
+                domain.getBalance().currency().getCurrencyCode(),
+                domain.getVersion()
         );
     }
 }
