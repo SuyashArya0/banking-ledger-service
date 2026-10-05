@@ -44,7 +44,8 @@ public class TransferMoneyService implements TransferMoneyUseCase
 
     @Override
     @Transactional
-    public TransferResult transfer(TransferCommand command) {
+    public TransferResult transfer(TransferCommand command)
+    {
         // Check idempotency key
         Optional<Transaction> existingTransaction = saveTransactionPort.findByReferenceId((command.referenceId()));
 
